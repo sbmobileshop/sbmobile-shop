@@ -7,7 +7,7 @@ import { useSettings } from "@/store/settings";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Copy, CheckCircle, AlertCircle, Phone, Wallet } from "lucide-react";
+import { Copy, CheckCircle, AlertCircle, Phone, Wallet, Banknote, CreditCard, Rocket } from "lucide-react";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -20,10 +20,23 @@ export default function CheckoutPage() {
     phone: "",
     email: "",
     address: "",
+    deliveryZone: "dhaka",
     paymentMethod: "CASH_ON_DELIVERY",
     transactionId: "",
     senderNumber: "",
   });
+
+  const deliveryZones = [
+    { id: "dhaka", name: " Dhaka", nameBn: "ঢাকা", cost: 0 },
+    { id: "dhaka_suburb", name: " Dhaka Suburb", nameBn: "ঢাকা সাবার্ব", cost: 50 },
+    { id: "ctg", name: " Chittagong", nameBn: "চট্টগ্রাম", cost: 100 },
+    { id: "others", name: " Other Districts", nameBn: "অন্যান্য জেলা", cost: 150 },
+  ];
+
+  const getDeliveryCost = () => {
+    const zone = deliveryZones.find(z => z.id === formData.deliveryZone);
+    return zone?.cost || 0;
+  };
 
   if (items.length === 0) {
     router.push("/cart");
@@ -43,15 +56,18 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
+      const deliveryCost = getDeliveryCost();
       const orderData = {
         ...formData,
+        deliveryCost,
         items: items.map((item) => ({
           productId: item.productId,
           name: item.name,
           price: item.price,
           quantity: item.quantity,
         })),
-        total: getTotal(),
+        subtotal: getTotal(),
+        total: getTotal() + deliveryCost,
       };
 
       const response = await fetch("/api/orders", {
@@ -100,10 +116,10 @@ export default function CheckoutPage() {
   };
 
   const paymentMethods = [
-    { id: "CASH_ON_DELIVERY", name: language === "bn" ? "ক্যাশ অন ডেলিভারি" : "Cash on Delivery", icon: "💵" },
-    { id: "BKASH", name: "bKash", icon: "💰" },
-    { id: "NAGAD", name: "Nagad", icon: "💳" },
-    { id: "ROCKET", name: "Rocket", icon: "🚀" },
+    { id: "CASH_ON_DELIVERY", name: language === "bn" ? "ক্যাশ অন ডেলিভারি" : "Cash on Delivery", icon: Banknote },
+    { id: "BKASH", name: "bKash", icon: CreditCard },
+    { id: "NAGAD", name: "Nagad", icon: CreditCard },
+    { id: "ROCKET", name: "Rocket", icon: Rocket },
   ];
 
   return (
@@ -161,6 +177,24 @@ export default function CheckoutPage() {
 
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1 block">
+                    {language === "bn" ? "ডেলিভারি জেলা" : "Delivery District"} *
+                  </label>
+                  <select
+                    value={formData.deliveryZone}
+                    onChange={(e) => setFormData({ ...formData, deliveryZone: e.target.value })}
+                    className="w-full p-2 border border-border rounded-md bg-background text-foreground"
+                    required
+                  >
+                    {deliveryZones.map((zone) => (
+                      <option key={zone.id} value={zone.id}>
+                        {language === "bn" ? zone.nameBn : zone.name} {zone.cost > 0 && `(+৳${zone.cost})`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1 block">
                     {language === "bn" ? "ঠিকানা" : "Address"} *
                   </label>
                   <Input
@@ -196,7 +230,7 @@ export default function CheckoutPage() {
                       onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value, transactionId: "", senderNumber: "" })}
                       className="sr-only"
                     />
-                    <span className="text-xl">{method.icon}</span>
+                    {method.icon && <method.icon className="h-5 w-5" />}
                     <span className="font-medium text-foreground">{method.name}</span>
                   </label>
                 ))}
@@ -234,8 +268,8 @@ export default function CheckoutPage() {
 
                     <p className="mt-3 text-xs text-green-600">
                       {language === "bn" 
-                        ? `Send ৳${getTotal().toLocaleString()} to ${getPaymentNumber()}`
-                        : `Send ৳${getTotal().toLocaleString()} to ${getPaymentNumber()}`
+                        ? `Send ৳${(getTotal() + getDeliveryCost()).toLocaleString()} to ${getPaymentNumber()}`
+                        : `Send ৳${(getTotal() + getDeliveryCost()).toLocaleString()} to ${getPaymentNumber()}`
                       }
                     </p>
                   </div>
@@ -311,8 +345,11 @@ export default function CheckoutPage() {
                   <span className="text-muted-foreground">
                     {language === "bn" ? "ডেলিভারি" : "Delivery"}
                   </span>
-                  <span className="font-medium text-success">
-                    {language === "bn" ? "ফ্রি" : "Free"}
+                  <span className="font-medium">
+                    {getDeliveryCost() === 0 
+                      ? (language === "bn" ? "ফ্রি" : "Free")
+                      : `৳${getDeliveryCost().toLocaleString()}`
+                    }
                   </span>
                 </div>
               </div>
@@ -320,7 +357,7 @@ export default function CheckoutPage() {
               <div className="flex justify-between mt-4 pt-4 border-t border-border">
                 <span className="font-bold text-lg">{language === "bn" ? "মোট" : "Total"}</span>
                 <span className="font-bold text-lg text-accent">
-                  ৳{getTotal().toLocaleString()}
+                  ৳{(getTotal() + getDeliveryCost()).toLocaleString()}
                 </span>
               </div>
 
