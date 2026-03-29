@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = 'force-static';
 import prisma from "@/lib/db";
 import { generateOrderNumber } from "@/lib/utils";
 
