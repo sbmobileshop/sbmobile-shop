@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* SB Mobile Shop Brand */
+    --background: 220 20% 97%;
+    --foreground: 0 0% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+
+    /* Navy #1d3557 */
+    --primary: 213 50% 23%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 150 20% 96%;
+    --secondary-foreground: 213 50% 23%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    /* Red #e63946 */
+    --accent: 355 78% 56%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 355 78% 56%;
+
+    --radius: 0.625rem;
+
+    /* Brand tokens */
+    --brand-red: 355 78% 56%;
+    --brand-navy: 213 50% 23%;
+    --brand-navy-light: 213 50% 33%;
+    --brand-mint: 150 50% 97%;
+    --brand-gold: 45 93% 58%;
+    --brand-gradient: linear-gradient(135deg, hsl(355 78% 56%) 0%, hsl(213 50% 23%) 100%);
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Sidebar */
+    --sidebar-background: 213 50% 18%;
+    --sidebar-foreground: 210 33% 90%;
+    --sidebar-primary: 355 78% 56%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 213 50% 28%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 213 50% 25%;
+    --sidebar-ring: 355 78% 56%;
+  }
+
+  .dark {
+    --background: 213 56% 8%;
+    --foreground: 210 33% 96%;
+    --card: 213 50% 12%;
+    --card-foreground: 210 33% 96%;
+    --popover: 213 50% 12%;
+    --popover-foreground: 210 33% 96%;
+    --primary: 210 33% 96%;
+    --primary-foreground: 213 50% 18%;
+    --secondary: 213 50% 18%;
+    --secondary-foreground: 210 33% 96%;
+    --muted: 213 50% 18%;
+    --muted-foreground: 213 15% 60%;
+    --accent: 355 78% 56%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 213 50% 20%;
+    --input: 213 50% 20%;
+    --ring: 355 78% 56%;
+    --sidebar-background: 213 56% 6%;
+    --sidebar-foreground: 210 33% 90%;
+    --sidebar-primary: 355 78% 56%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 213 50% 15%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 213 50% 15%;
+    --sidebar-ring: 355 78% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Poppins', 'Hind Siliguri', sans-serif;
+  }
+  .font-bangla { font-family: 'Hind Siliguri', 'Poppins', sans-serif; }
+  .font-english { font-family: 'Poppins', sans-serif; }
+
+  /* Force LTR on ALL text inputs to prevent reverse typing */
+  input, textarea, [contenteditable="true"], select, .ProseMirror, [role="textbox"] {
+    direction: ltr !important;
+    text-align: left !important;
+    unicode-bidi: plaintext !important;
+  }
+
+  /* Prevent auto-zoom on mobile inputs */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+
+  /* All interactive elements get pointer cursor */
+  button, a, [role="button"], input[type="submit"], input[type="button"], select, summary {
+    cursor: pointer;
+  }
+  button:disabled, [disabled] {
+    cursor: not-allowed;
+  }
+}
+
+/* ===== Gradient Top Bar (like old site) ===== */
+.gradient-bar {
+  height: 5px;
+  background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+/* ===== Gradient Button ===== */
+.btn-gradient {
+  background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  box-shadow: 0 4px 15px hsl(var(--accent) / 0.3);
+}
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px hsl(var(--accent) / 0.4);
+}
+
+/* ===== Section styling (old site) ===== */
+.section-title-styled {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.section-title-styled h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: hsl(var(--primary));
+  position: relative;
+  display: inline-block;
+}
+.section-title-styled h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+  border-radius: 3px;
+}
+.section-title-styled p {
+  color: hsl(220 9% 46%);
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+/* ===== Card hover effects (old site style) ===== */
+.card-hover {
+  transition: all 0.3s ease;
+  border: 1px solid hsl(220 13% 91%);
+}
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  border-color: hsl(var(--accent) / 0.3);
+}
+
+/* ===== Feature card icon (old site) ===== */
+.feature-icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(var(--accent) / 0.1) 0%, hsl(var(--primary) / 0.1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  transition: all 0.3s ease;
+}
+.card-hover:hover .feature-icon-circle {
+  background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+  transform: scale(1.1);
+}
+.card-hover:hover .feature-icon-circle svg {
+  color: white !important;
+}
+
+/* ===== Tool card (old site) ===== */
+.tool-card-styled {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid hsl(220 13% 91%);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.tool-card-styled:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px hsl(var(--accent) / 0.15);
+  border-color: hsl(var(--accent) / 0.3);
+}
+.tool-card-styled .tool-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+.tool-card-styled .tool-btn {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 6px 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.tool-card-styled .tool-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px hsl(var(--accent) / 0.3);
+}
+
+/* ===== Payment button styles (old site) ===== */
+.payment-btn {
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: 2px solid hsl(220 13% 91%);
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.payment-btn:hover, .payment-btn.active {
+  border-color: hsl(var(--accent));
+  box-shadow: 0 4px 12px hsl(var(--accent) / 0.2);
+  transform: translateY(-2px);
+}
+.payment-btn.active {
+  background: hsl(var(--accent) / 0.05);
+}
+
+/* ===== Course card (old site) ===== */
+.course-card-styled {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid hsl(220 13% 91%);
+  transition: all 0.3s ease;
+}
+.course-card-styled:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+.course-card-styled img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.course-card-styled:hover img {
+  transform: scale(1.05);
+}
+
+/* ===== Floating WhatsApp button (old site) ===== */
+.floating-whatsapp {
+  /* Now managed by FloatingButtons component */
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ===== Animate on scroll ===== */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: hsl(var(--muted)); }
+::-webkit-scrollbar-thumb { background: hsl(var(--muted-foreground) / 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground) / 0.5); }
+
+/* ===== Gradient bottom border (hero) ===== */
+.gradient-bottom-border {
+  height: 10px;
+  background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+}
+
+/* ===== Support Button Bounce ===== */
+@keyframes support-bounce {
+  0%, 100% { transform: translateY(0); }
+  15% { transform: translateY(-8px); }
+  30% { transform: translateY(0); }
+  45% { transform: translateY(-4px); }
+  60% { transform: translateY(0); }
+}
